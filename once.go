@@ -21,7 +21,8 @@ func New(f func()) *Once {
 	return &Once{f: f}
 }
 
-// Call the function provided in New
+// Call the function provided in New. Calling Do on an uninitialized
+// Once object will panic.
 func (o *Once) Do() {
 	o.o.Do(o.f)
 }
