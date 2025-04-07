@@ -15,10 +15,13 @@ type Once struct {
 	f func()
 }
 
+// New provides the function that Do will will call. The function
+// will only be called once no matter how many times Do is invoked.
 func New(f func()) *Once {
 	return &Once{f: f}
 }
 
+// Call the function provided in New
 func (o *Once) Do() {
 	o.o.Do(o.f)
 }

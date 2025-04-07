@@ -34,9 +34,10 @@ type Error struct {
 //		... do stuff
 //		err = something()
 //		if err != nil {
-//	        re.Do()
-//	     }
-//	     ... repeat as needed
+//		   re.Do()
+//		   return
+//		}
+//		... repeat as needed
 //	  }()
 //
 //	  err :- <-echan
@@ -47,6 +48,7 @@ func ReliableError(c chan error, e *error) *Error {
 	}
 }
 
+// Catch should be deferred right after calling ReliableError
 func (e *Error) Catch() {
 	if r := recover(); r != nil {
 		if err, ok := r.(error); ok {
@@ -58,6 +60,8 @@ func (e *Error) Catch() {
 	e.o.Do(func() { e.c <- *e.e })
 }
 
+// Do is optional but is useful to when returning from the function
+// that is generating an error.
 func (e *Error) Do() {
 	e.o.Do(func() { e.c <- *e.e })
 }
